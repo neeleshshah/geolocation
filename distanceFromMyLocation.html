@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+
+<html>
+<head>
+   <title>Distance from my location</title>
+   <script type="text/javascript">
+      function calcDistance() 
+      {
+         if (navigator.geolocation) 
+         {
+            navigator.geolocation.getCurrentPosition (onSuccess 
+                                                     ,onFailure 
+                                                     ,{maximumAge: 60 * 1000
+                                                      ,timeout: 5 * 60 * 1000
+                                                      ,enableHighAccuracy: true
+                                                      }
+                                                     );
+         } else
+         {
+            document.getElementById("result").innerHTML = "Your browser does not support HTML5 Geolocation";
+         }
+      }
+      
+      function onSuccess(position)
+      {
+         var myLatitude = position.coords.latitude;
+         var myLongitude = position.coords.longitude;
+         var destination = getLatLng(document.getElementById("whereto").value);
+         //alert("Lat: " + myLatitude + ", Lng: " + myLongitude);
+         //alert("Lat: " + destination.latitude + ", Lng: " + destination.longitude);
+         
+         var myLatitudeRadians = myLatitude * Math.PI / 180;
+         var myLongitudeRadians = myLongitude * Math.PI / 180;
+         var destinationLatitudeRadians = destination.latitude * Math.PI / 180;
+         var destinationLongitudeRadians = destination.longitude * Math.PI / 180;
+         
+         var distance = 3959 * Math.acos(
+                                        Math.cos(myLatitudeRadians) * Math.cos(destinationLatitudeRadians) *
+                                        Math.cos(myLongitudeRadians - destinationLongitudeRadians) +
+                                        Math.sin(myLatitudeRadians) * Math.sin(destinationLatitudeRadians) 
+                                        );
+         //alert('Distance : ' + distance);  
+         document.getElementById("result").innerHTML = "The distance between your current location and "
+            + document.getElementById("whereto").value + " is " + Math.round(distance * 100) / 100 + " miles.";
+      }	
+      
+      function getLatLng(address) 
+      {
+         var destinationLatitude;
+         var destinationLongitude;
+         var scrubbedAddress = address.replace(" " ,"+");
+         var destinationURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" 
+               + scrubbedAddress;
+         var myRequest = new XMLHttpRequest();
+         myRequest.open ("GET" ,destinationURL ,false);
+         myRequest.send();
+         
+         if (myRequest.readyState == 4 && myRequest.status == 200) 
+         {
+            myResponse = eval ("(" + myRequest.responseText + ")");
+            destinationLatitude = myResponse.results[0].geometry.location.lat;
+            destinationLongitude = myResponse.results[0].geometry.location.lng;
+         } 
+         return {latitude:destinationLatitude ,longitude:destinationLongitude} ;
+      }
+      
+      function onFailure(error)
+      {
+         document.getElementById("result").innerHTML = "Geolocation errored out. " 
+            + error.code + " " + error.message;
+      }
+   </script>
+</head>
+
+<body>
+
+
+<fieldset style="width:500px;">
+   <legend><b>Distance from my location</b></legend>
+   Where to: <input type="text" id="whereto" /><br /><br />
+   <button id="btnCalculate" onclick="calcDistance()">Calculate Distance</button><br />
+   
+   <div id="result"></div>
+</fieldset>
+
+
+
+</body>
+</html>

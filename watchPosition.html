@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+   <title>Geolocation - Get Current Position</title>
+   <script type="text/javascript">
+      var watchID;
+      function watchPosition() 
+      {
+         if (navigator.geolocation)
+         {
+            watchID = navigator.geolocation.watchPosition (successPosition 
+                                                          ,failurePosition 
+                                                          ,{enableHighAccuracy:false 
+                                                           ,timeout:5000
+                                                           ,maximumAge:4000 
+                                                           }
+                                                          );
+         } else
+         {
+            document.getElementById("result").innerHTML = "No GEOLOCATION support";
+         }
+      }
+      
+      function successPosition(position)
+      {
+         document.getElementById("result").innerHTML = 
+                "Latitude: " + position.coords.latitude + '<br/>'
+              + "Longitude: " + position.coords.longitude + '<br/>'
+              + "Accuracy: " + position.coords.accuracy + '<br/>'
+              + "Altitude: " + position.coords.altitude + '<br/>'
+              + "Altitude Accuracy: " + position.coords.altitudeAccuracy + '<br/>'
+              + "Direction: " + position.coords.heading + '<br/>'
+              + "Speed: " + position.coords.speed + '<br/>'
+              + "Timestamp: " + position.timestamp + '<br/>';
+           
+      }
+      
+      function stopWatchPosition() 
+      {
+         navigator.geolocation.clearWatch(watchID);
+      }
+      
+      function failurePosition (error) 
+      {
+         switch (error.code) 
+         {
+            case 1:
+               document.getElementById("result").innerHTML = "Location Permission Denied. " + error.code  + ' ' + error.message;
+               break;
+            case 2:
+               document.getElementById("result").innerHTML = "Position Unavailable. " + error.code  + ' ' + error.message;
+               break;
+            case 3:
+               document.getElementById("result").innerHTML = "Timeout. " + error.code  + ' ' + error.message;
+               break;
+            default:
+               document.getElementById("result").innerHTML = "Unknown error. " + error.code  + ' ' + error.message;
+               break;                        
+         }
+      }      
+   </script>
+</head>
+
+<body>
+
+<div id="result"></div>
+
+<button id="btnStartTracking" onclick="watchPosition();">Start Tracking Location</button>
+<button id="btnStopTracking" onclick="stopWatchPosition();">Stop Tracking Location</button>
+
+</body>
+</html>

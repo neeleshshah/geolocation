@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+   <title>Static Map</title>
+   <script type="text/javascript">
+   
+      window.onload = function() 
+      {
+         var mapURL = "https://maps.googleapis.com/maps/api/staticmap?"
+                    + "center=38.897733,-77.036531" 
+                    + "&zoom=15"
+                    + "&size=600x500"
+                    + "&maptype=roadmap" ;
+         document.getElementById("staticMap").innerHTML = "<img src='"+ mapURL +"'/>";
+      }
+   </script>
+</head>
+
+<body>
+   <p>White House</p>
+   <div id="staticMap" style="width=600px; height:500px;"></div>
+
+</body>
+</html>

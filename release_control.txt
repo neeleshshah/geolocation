@@ -1,0 +1,46 @@
+# ----------
+# SQL FILES WH INSTANCE
+# ----------
+# WH_USGEDW_GRANTS
+  WH_USGEDW_GRANTS::N:$release_base/bin/exec_sql:$release_base ora1120_client $release_dir/sql/WH_USGEDW_GRANTS.sql EASREL[USGEDW] $USG123REL_WH_DB $encpw_dir/USG123REL_WH_DB_EASREL_PW Y:
+# ----------
+# WH_USGODS_GRANTS
+  WH_USGODS_GRANTS::N:$release_base/bin/exec_sql:$release_base ora1120_client $release_dir/sql/WH_USGODS_GRANTS.sql EASREL[USGODS] $USG123REL_WH_DB $encpw_dir/USG123REL_WH_DB_EASREL_PW Y:
+# ----------
+# WH_USG_APPS_GRANTS
+  WH_USG_APPS_GRANTS::N:$release_base/bin/exec_sql:$release_base ora1120_client $release_dir/sql/WH_USG_APPS_GRANTS.sql EASREL[USG_APPS] $USG123REL_WH_DB $encpw_dir/USG123REL_WH_DB_EASREL_PW Y:
+# ----------
+# WH_APP_DMA_SYNONYMS
+  WH_APP_DMA_SYNONYMS::N:$release_base/bin/exec_sql:$release_base ora1120_client $release_dir/sql/WH_APP_DMA_SYNONYMS.sql EASREL[APP_DMA] $USG123REL_WH_DB $encpw_dir/USG123REL_WH_DB_EASREL_PW Y:
+
+
+
+# ----------
+# SQL FILES REPOS INSTANCE
+# ----------
+# APP_SECURITY_API_PACKAGES
+  APP_SECURITY_API_PACKAGES::N:$release_base/bin/exec_sql:$release_base ora1120_client $release_dir/sql/APP_SECURITY_API_PACKAGES.sql EASREL[APP_SECURITY_API] $USG123REL_REPO_DB $encpw_dir/USG123REL_REPO_DB_EASREL_PW Y:
+# ----------
+# APP_SECURITY_API_GRANTS
+  APP_SECURITY_API_GRANTS::N:$release_base/bin/exec_sql:$release_base ora1120_client $release_dir/sql/APP_SECURITY_API_GRANTS.sql EASREL[APP_SECURITY_API] $USG123REL_REPO_DB $encpw_dir/USG123REL_REPO_DB_EASREL_PW Y:
+# ----------
+# APP_DMA_SEQUENCES
+  APP_DMA_SEQUENCES::N:$release_base/bin/exec_sql:$release_base ora1120_client $release_dir/sql/APP_DMA_SEQUENCES.sql EASREL[APP_DMA] $USG123REL_REPO_DB $encpw_dir/USG123REL_REPO_DB_EASREL_PW Y:
+# ----------
+# APP_DMA_PACKAGES
+  APP_DMA_PACKAGES::N:$release_base/bin/exec_sql:$release_base ora1120_client $release_dir/sql/APP_DMA_PACKAGES.sql EASREL[APP_DMA] $USG123REL_REPO_DB $encpw_dir/USG123REL_REPO_DB_EASREL_PW Y:
+# ----------
+# APP_DMA_VIEWS
+  APP_DMA_VIEWS::N:$release_base/bin/exec_sql:$release_base ora1120_client $release_dir/sql/APP_DMA_VIEWS.sql EASREL[APP_DMA] $USG123REL_REPO_DB $encpw_dir/USG123REL_REPO_DB_EASREL_PW Y:
+# ----------
+# APP_DMA_SYNONYMS
+  APP_DMA_SYNONYMS::N:$release_base/bin/exec_sql:$release_base ora1120_client $release_dir/sql/APP_DMA_SYNONYMS.sql EASREL[APP_DMA] $USG123REL_REPO_DB $encpw_dir/USG123REL_REPO_DB_EASREL_PW Y:
+#
+# APEX OBJECTS
+# ------------
+# f112
+ f112::N:$release_base/bin/exec_sql:$release_base ora1120_client $release_dir/sql/f112.sql EASREL[APEX_040200] $USG123REL_REPO_DB $encpw_dir/USG123REL_REPO_DB_EASREL_PW Y:
+# f118
+ f118::N:$release_base/bin/exec_sql:$release_base ora1120_client $release_dir/sql/f118.sql EASREL[APEX_040200] $USG123REL_REPO_DB $encpw_dir/USG123REL_REPO_DB_EASREL_PW Y:
+
+#

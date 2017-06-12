@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+
+<html>
+<head>
+   <title>Mark my Location</title>
+   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
+   <script type="text/javascript">
+      var latitude = 39.8282;
+      var longitude = -98.5795; 
+      var zoomLevel = 13;
+      var mapOptions;
+      var mapdetails = "Please wait...trying to locate";
+      var watchID;
+      var debug = false;
+      
+      function getCoords()
+      {
+         if (debug) 
+            alert ("Start getCoords");
+            
+         if (navigator.geolocation) 
+         {
+            if (debug) 
+               alert ("Navigator Geolocation OK");
+               
+            watchID = navigator.geolocation.watchPosition (positionSuccess ,positionFailure ,{maximumAge: 5*60*1000 ,timeout:1*60*1000 ,enableHighAccuracy:true});
+
+            if (debug) 
+               alert (latitude + " " + longitude + " " + zoomLevel);
+         } else
+         {
+            positionFailure();
+         }
+      }
+      
+      function positionSuccess (position) 
+      {
+         if (debug) 
+         {
+               alert ("Navigator Geolocation Call Success");
+               alert ("Latitude: " + position.coords.latitude + '<br/>'
+              + "Longitude: " + position.coords.longitude + '<br/>'
+              + "Accuracy: " + position.coords.accuracy + '<br/>'
+              + "Altitude: " + position.coords.altitude + '<br/>'
+              + "Altitude Accuracy: " + position.coords.altitudeAccuracy + '<br/>'
+              + "Direction: " + position.coords.heading + '<br/>'
+              + "Speed: " + position.coords.speed + '<br/>'
+              + "Timestamp: " + position.timestamp + '<br/>'  );
+         }
+               
+         latitude = position.coords.latitude;
+         longitude = position.coords.longitude;
+         zoomLevel = 17;      
+         mapdetails = "Latitude: " + position.coords.latitude + '<br/>'
+              + "Longitude: " + position.coords.longitude + '<br/>'
+              + "Accuracy: " + position.coords.accuracy + '<br/>'
+              + "Altitude: " + position.coords.altitude + '<br/>'
+              + "Altitude Accuracy: " + position.coords.altitudeAccuracy + '<br/>'
+              + "Direction: " + position.coords.heading + '<br/>'
+              + "Speed: " + position.coords.speed + '<br/>'
+              + "Timestamp: " + position.timestamp + '<br/>'  ; 
+         document.getElementById("mapdetails").innerHTML = mapdetails;              
+         mapOptions = 
+         { 
+            center     : new google.maps.LatLng(latitude ,longitude)
+           ,zoom       : zoomLevel
+           ,mapTypeId  : google.maps.MapTypeId.ROADMAP
+         };
+         var map = new google.maps.Map(document.getElementById("map") ,mapOptions);
+         
+         var marker1 = new google.maps.Marker
+         ({
+            position   : new google.maps.LatLng(latitude ,longitude)
+           ,map        : map
+           ,animation  : google.maps.Animation.DROP
+           ,title      : "I am here !"
+         });
+         
+         var weather = new XMLHttpRequest();
+         var weatherURL = "http://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude;
+         weather.open("GET" ,weatherURL ,false);
+         weather.send();
+         
+         if (weather.readyState == 4 && weather.status == 200)
+         {
+            var weatherResponse = weather.responseText;
+            var weatherJSON = eval("(" + weatherResponse + ")");
+            var weatherDetails = "Location: "  + weatherJSON.name + '<br/>'
+               + "Condition: " + weatherJSON.weather[0].description + '<br/>'
+               + "Temperature: " + weatherJSON.main.temp + '<br/>'
+               + "Pressure: " + weatherJSON.main.pressure + '<br/>'
+               + "Humidity: " + weatherJSON.main.humidity + '<br/>'
+               + "Windspeed: " + weatherJSON.wind.speed + '<br/>'
+               ;
+            document.getElementById("weather").innerHTML = "Weather: " + weatherDetails;
+         } else
+         {
+            document.getElementById("weather").innerHTML = "Weather details not available";
+         }                
+         
+         var infoWin = new google.maps.InfoWindow
+         ({
+             content  : "Neelesh Shah..."
+         });
+         
+         google.maps.event.addListener(marker1 
+                                      ,"click"
+                                      ,function () 
+                                       {
+                                          infoWin.open(map ,marker1);
+                                       }
+                                      );     
+         var geocoder = new google.maps.Geocoder();
+         var latlng = new google.maps.LatLng(latitude ,longitude);
+         
+         geocoder.geocode({'latLng': latlng} 
+                          ,function(results ,status) 
+                           {   
+                              if (status == google.maps.GeocoderStatus.OK) 
+                              {  
+                                 if (results) 
+                                 { 
+                                    document.getElementById("address").innerHTML = "Address: " + results[0].formatted_address;
+                                 } else
+                                 {
+                                    document.getElementById("address").innerHTML = "Address details not available...";
+                                 }
+                              } else
+                              {
+                                 document.getElementById("address").innerHTML = "Address details not available...";
+                              }
+                           }
+                         );
+                                               
+         document.getElementById("btnStartTracking").style.display = "none";
+         document.getElementById("btnStopTracking").style.display = "inline";                                                
+      }
+      
+      function positionFailure (error) 
+      {
+         if (debug) 
+               alert ("Navigator Geolocation Call Failed. " + error.code + " " + error.message);
+               
+         latitude = 39.8282;
+         longitude = 98.5795;
+         zoomLevel = 13;
+         mapdetails = "Navigator Geolocation Call Failed. " + error.code + " " + error.message;
+         document.getElementById("mapdetails").innerHTML = mapdetails;
+      }
+                  
+      window.onload = function() 
+      {
+         if (debug) 
+            alert ("Start");
+         
+         getCoords();        
+      }
+      
+      function stopGetCoords() 
+      {
+         if (debug) 
+            alert ("Start");
+         
+         navigator.geolocation.clearWatch(watchID);
+         document.getElementById("btnStopTracking").style.display = "none";
+         document.getElementById("btnStartTracking").style.display = "inline";         
+      }     
+
+       window.unload = function() 
+      {
+         if (debug) 
+            alert ("Start");
+         
+         stopGetCoords();
+
+      }         
+   </script>
+</head>
+
+<body>
+   <p>My Location</p>
+   <div id="mapdetails"></div>
+   <div id="address">Try to fetch address...</div>
+   <div id="weather">Try to fetch weather information...</div>
+      
+   <button id="btnStartTracking" onclick="getCoords();">Start Tracking Location</button>
+   <button id="btnStopTracking" onclick="stopGetCoords();">Stop Tracking Location</button>
+   <div id="map" style="width=600px; height:500px;"></div>
+
+</body>
+</html>

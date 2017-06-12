@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+   <title>Interactive Map</title>
+   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
+   <script type="text/javascript">
+   
+      window.onload = function() 
+      {
+         var mapOptions = 
+         { 
+            center     : new google.maps.LatLng(38.897733,-77.036531)
+           ,zoom       : 15
+           ,mapTypeId  : google.maps.MapTypeId.ROADMAP
+         };
+         var map = new google.maps.Map(document.getElementById("map") ,mapOptions);
+         
+         var marker1 = new google.maps.Marker
+         ({
+            position   : new google.maps.LatLng(38.89,-77.03)
+           ,map        : map
+           ,animation  : google.maps.Animation.DROP
+           ,title      : "My Marker"
+         });
+         
+         var infoWin = new google.maps.InfoWindow
+         ({
+             content  : "My information Window"
+         });
+         
+         google.maps.event.addListener(marker1 
+                                      ,"click"
+                                      ,function () 
+                                       {
+                                          infoWin.open(map ,marker1);
+                                       }
+                                      );
+      }
+   </script>
+</head>
+
+<body>
+   <p>White House</p>
+   <div id="map" style="width=600px; height:500px;"></div>
+
+</body>
+</html>
